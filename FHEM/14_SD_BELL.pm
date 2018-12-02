@@ -25,6 +25,10 @@
 # - VTX-BELL_Funkklingel  [Protocol 79] length 12 (3)
 #     get sduino_dummy raw MU;;P0=656;;P1=-656;;P2=335;;P3=-326;;P4=-5024;;D=01230121230123030303012423012301212301230303030124230123012123012303030301242301230121230123030303012423012301212301230303030124230123012123012303030301242301230121230123030303012423012301212301230303030124230123012123012303030301242301230121230123030303;;CP=2;;O;;
 ####################################################################################################################################
+# - QUIGG Globaltronics GT-RD-1T door bell [Protocol 88] length 20 (5)
+#     get sduino_dummy raw MU;;P0=-10136;;P1=293;;P2=-997;;P3=891;;P4=-1619;;P5=204;;P6=-620;;D=0123454123412323414123412323232341414141236;;CP=1;;R=232;;
+#     3 nibbles bell code (changed via button), 2 nibbles ID(?): e.g. E1
+####################################################################################################################################
 # !!! ToDo´s !!!
 #     -
 #     -
@@ -46,11 +50,12 @@ my %models = (
 	"42"  => 'KANGTAI',
 	"57"  => 'FG_/_Basic-Serie',
 	"79"  => 'VTX_BELL',
+	"88"  => 'QUIGG_Globaltronics_GT-RD-1T',
 );
 
 sub SD_BELL_Initialize($) {
 	my ($hash) = @_;
-	$hash->{Match}		= "^P(?:14|15|32|41|42|57|79)#.*";
+	$hash->{Match}		= "^P(?:14|15|32|41|42|57|79|88)#.*";
 	$hash->{DefFn}		= "SD_BELL::Define";
 	$hash->{UndefFn}	= "SD_BELL::Undef";
 	$hash->{ParseFn}	= "SD_BELL::Parse";
@@ -100,7 +105,7 @@ sub Define($$) {
 
 	# Argument					    0	   1		2		    3				4
 	return "wrong syntax: define <name> SD_BELL <Protocol> <HEX-Value> <optional IODEV>" if(int(@a) < 3 || int(@a) > 5);
-	return "wrong <protocol> $a[2]" if not($a[2] =~ /^(?:14|15|32|41|42|57|79)/s);
+	return "wrong <protocol> $a[2]" if not($a[2] =~ /^(?:14|15|32|41|42|57|79|88)/s);
 	### checks ###
 	return "wrong HEX-Value! Protocol $a[2] HEX-Value to short | long or not HEX (0-9 | a-f | A-F){3,8}" if (not $a[3] =~ /^[0-9a-fA-F]{3,8}/s);
 
@@ -249,6 +254,7 @@ sub Attr(@) {
 	<li>Elro (Smartwares) Doorbell DB200 / 16 melodies - unitec Modell:98156+98YK [Protocol 41]</li>
 	<li>m-e doorbell fuer FG- and Basic-Serie  [Protocol 57]</li>
 	<li>VTX-BELL_Funkklingel  [Protocol 79]</li>
+	<li>QUIGG_Globaltronics_GT-RD-1T  [Protocol 88]</li>
 	</ul><br><br>
 
 	<b>Set</b><br>
@@ -280,6 +286,7 @@ sub Attr(@) {
 	<li>Elro (Smartwares) Doorbell DB200 / 16 melodies - unitec Modell:98156+98YK [Protocol 41]</li>
 	<li>m-e doorbell fuer FG- und Basic-Serie  [Protocol 57]</li>
 	<li>VTX-BELL_Funkklingel  [Protocol 79]</li>
+	<li>QUIGG_Globaltronics_GT-RD-1T  [Protocol 88]</li>
 	</ul><br><br>
 
 	<b>Set</b><br>
